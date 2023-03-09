@@ -33,9 +33,11 @@ const getCharacters = () => {
       contentWrapper.innerHTML = '';
       let characterOneInfo = await getPeople(`https://swapi.dev/api/people/${selectOne.value}`);
       let characterTwoInfo = await getPeople(`https://swapi.dev/api/people/${selectTwo.value}`);
+      
       //funktionalitet för att hämta filmer
         let characterOneMovies = [];
         let characterTwoMovies = [];
+        //pusha in filmerna i tomma arrayer
         for (let i = 0; i < characterOneInfo.films.length; i++) {
             let movie = await getPeople(characterOneInfo.films[i]);
             characterOneMovies.push(movie);
@@ -55,6 +57,7 @@ const getCharacters = () => {
             characterOneInfo.hair_color,
             characterOneInfo.skinColor,
             characterOneInfo.eyeColor,
+            characterOneInfo.pictureUrl,
             );
             let characterTwo = new Character(
                 characterTwoInfo.name,
@@ -64,11 +67,13 @@ const getCharacters = () => {
                 characterTwoInfo.hair_color,
                 characterTwoInfo.skinColor,
                 characterTwoInfo.eyeColor,
+                characterTwoInfo.pictureUrl,
                 );
 
                 
       let characterDiv = document.createElement('div');
       characterDiv.innerHTML = `<div><p>${characterOne.name}</p>
+      img
       <div id="characterOneInfo"></div>
       </div><div>
       <p>${characterTwo.name}</p>
@@ -76,6 +81,7 @@ const getCharacters = () => {
       </div>
       <button id="compareBtn">Compare</button>
      `;
+
       contentWrapper.append(characterDiv);
 
         let compareBtn = document.querySelector('#compareBtn');
