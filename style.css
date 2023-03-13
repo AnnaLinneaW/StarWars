@@ -1,0 +1,117 @@
+*{
+    background-color: #ffe6a7;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+body{
+    background-color: #ffe6a7;
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+h1{
+    font-family: Star Jedi Outline;
+    font-size: 80px;
+}
+
+img{
+    max-width: 200px;
+    height: 150px;
+    padding: auto;
+    margin: 40px;
+}
+.select{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+ 
+}
+
+.character-div{
+   flex: 1;
+   display: flex;
+   flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    text-align: left;
+    padding: 20px;
+
+    
+}
+.character-one{
+   border-radius: 20px;
+   margin: 50px;
+   box-shadow: 6px 6px 10px 6px rgba(0,0,0,0.5);
+   padding: 30px;
+}
+.character-two{
+    border-radius: 20px;
+    margin: 50px;
+    box-shadow: 6px 6px 10px 6px rgba(0,0,0,0.5);
+    padding: 30px;
+}
+p{
+    font-family: moonhouse;
+    font-size: 30px;
+}
+button{
+    background-color: #ffe6a7;
+   width: 120px;
+   height: 50px;
+   border-radius: 10px;
+   box-shadow: 6px 6px 6px 6px rgba(0,0,0,0.5);
+   font-family: moonhouse;
+   border-style: none;
+   margin: 10px;
+   
+}
+button:hover{
+    background-color: #ffcc66;
+    color: #333;
+    cursor: pointer;
+
+}
+button:focus{
+    background-color: #ffe6a7;}
+select{
+    border-radius: 10px;
+    height: 40px;
+    margin: 10px;
+    font-family: moonhouse;
+    box-shadow: 6px 6px 10px 6px rgba(0,0,0,0.5);
+    border:none
+}
+
+
+.taller{
+    color: aqua
+}
+
+.heavier{
+    color: red
+}
+
+.more-movies{
+    color: green;
+    font-weight: bold;
+
+}
+
+.same-gender{
+    color: blue
+}
+.same-haircolor{
+    color: purple
+}
+.same-skincolor{
+    color: orange
+}
+.same-eyecolor{
+    color: yellow
+}
