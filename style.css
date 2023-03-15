@@ -49,7 +49,7 @@ img{
    box-shadow: 6px 6px 10px 6px rgba(0,0,0,0.5);
    padding: 30px;
    width: 330px;
-   height: 630px;
+   height: auto;
 }
 .character-two{
     border-radius: 20px;
@@ -57,7 +57,15 @@ img{
     box-shadow: 6px 6px 10px 6px rgba(0,0,0,0.5);
     padding: 30px;
     width: 330px;
-    height: 630px;
+    height: auto;
+}
+.movieDiv{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    align-items: left;
+    text-align: left;
+    padding: 5px;
 }
 p{
     font-family: moonhouse;
@@ -104,7 +112,6 @@ select{
     color: green;
     font-weight: bold;
     border: solid 2px green;
-
 }
 
 .same-gender{

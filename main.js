@@ -1,4 +1,3 @@
-
 async function getPeople(endpoint) {
     let data = await fetch(endpoint);
     let json = await data.json();
@@ -6,7 +5,7 @@ async function getPeople(endpoint) {
 }
 
 class Character {
-    constructor(name, gender, height, mass, hair_color, skinColor, eyeColor, movies, pictureUrl) {
+    constructor(name, gender, height, mass, hair_color, skinColor, eyeColor, movies, pictureUrl,vehicles, starships, homeworld) {
         this.name = name;
         this.gender = gender;
         this.height = height;
@@ -16,9 +15,51 @@ class Character {
         this.eyeColor = eyeColor;
         this.movies = [];
         this.pictureUrl = pictureUrl;
-    }
-};
+        this.homeworld = {};
+        this.vehicles = vehicles;
+        this.starships = starships;
+    };
 
+    getSameMovies(characterOne, characterTwo) {
+        let sameMovies = [];
+        for(let i = 0; i < characterOne.movies.length; i++) {
+            for(let j = 0; j < characterTwo.movies.length; j++) {
+                if(characterOne.movies[i] === characterTwo.movies[j]) {
+                    sameMovies.push(characterOne.movies[i]);
+                }
+            }
+        }
+        sameMovies.forEach(movie => console.log(movie.title));
+    };
+
+    getfirstMovie(character) {
+        return character.movies[0].release_date 
+    };
+
+    getHomePlanet(characterOne, characterTwo) {
+        if(characterOne.homeworld.name === characterTwo.homeworld.name) {
+            return`${characterOne.name} and ${characterTwo.name} share the same homeplanet: ${characterOne.homeworld.name}`
+        } else {
+            return`${characterOne.name}´s homeplanet is ${characterOne.homeworld.name} and ${characterTwo.name}´s homeplanet is ${characterTwo.homeworld.name}`
+        }
+    };
+
+
+    getExpensiveVehicle(character) {
+        let expensiveVehicle = null;
+        for(let i = 0; i < character.vehicles.length; i++) {
+            if(!expensiveVehicle || Number(character.vehicles[i].cost_in_credits) > Number(expensiveVehicle.cost_in_credits)) {
+                expensiveVehicle = character.vehicles[i];
+            }
+        }
+        for(let i = 0; i < character.starships.length; i++) {
+            if(!expensiveVehicle || Number(character.starships[i].cost_in_credits) > Number(expensiveVehicle.cost_in_credits)) {
+                expensiveVehicle = character.starships[i];
+            }
+        }
+        return expensiveVehicle.name;
+    };
+}
 let contentWrapper = document.querySelector('#contentWrapper');
 let characterBtn = document.querySelector('#characterBtn');
 let selectOne= document.querySelector('#selectOne');
@@ -51,7 +92,40 @@ const getCharacters = () => {
             let movie = await getPeople(characterTwoInfo.films[i]);
             characterTwoMovies.push(movie);
         };
-        
+        //funktionalitet för att hämta fordon
+        let characterOneVehicles = [];
+        let characterTwoVehicles = [];
+        //pusha in fordonen i tomma arrayer
+        for (let i = 0; i < characterOneInfo.vehicles.length; i++) {
+            let vehicle = await getPeople(characterOneInfo.vehicles[i]);
+            characterOneVehicles.push(vehicle);
+        }
+        for (let i = 0; i < characterTwoInfo.vehicles.length; i++) {
+            let vehicle = await getPeople(characterTwoInfo.vehicles[i]);
+            characterTwoVehicles.push(vehicle);
+        };
+        //funktionalitet för att hämta starships
+        let characterOneStarships = [];
+        let characterTwoStarships = [];
+        //pusha in starshipsen i tomma arrayer
+
+        for (let i = 0; i < characterOneInfo.starships.length; i++) {
+            let starship = await getPeople(characterOneInfo.starships[i]);
+            characterOneStarships.push(starship);
+        }
+        for (let i = 0; i < characterTwoInfo.starships.length; i++) {
+            let starship = await getPeople(characterTwoInfo.starships[i]);
+            characterTwoStarships.push(starship);
+        };
+        //funktionalitet för att hämta homeworld
+        let characterOneHomeworld = await getPeople(characterOneInfo.homeworld);
+        let characterTwoHomeworld = await getPeople(characterTwoInfo.homeworld);
+        //lägg till homeworld i objektet
+        characterOneInfo.homeworld.name = characterOneHomeworld.name;
+        characterTwoInfo.homeworld.name = characterTwoHomeworld.name;
+
+
+
         //skapa objekt av klassen Character
 
         let characterOne = new Character(
@@ -63,6 +137,10 @@ const getCharacters = () => {
             characterOneInfo.skinColor,
             characterOneInfo.eyeColor,
             characterOneInfo.pictureUrl,
+            characterOneInfo.movies= characterOneMovies,
+            characterOneInfo.vehicles=characterOneVehicles,
+            characterOneInfo.starships=characterOneStarships,
+            characterOneInfo.homeworld=characterOneHomeworld,
             );
             let characterTwo = new Character(
                 characterTwoInfo.name,
@@ -73,7 +151,16 @@ const getCharacters = () => {
                 characterTwoInfo.skinColor,
                 characterTwoInfo.eyeColor,
                 characterTwoInfo.pictureUrl,
+                characterTwoInfo.movies=characterTwoMovies,
+                characterTwoInfo.vehicles=characterTwoVehicles,
+                characterTwoInfo.starships= characterTwoStarships,
+                characterTwoInfo.homeworld=characterTwoHomeworld,
                 );
+
+                characterOne.getSameMovies(characterTwoInfo, characterOneInfo);
+                console.log(characterOne);
+
+
 //funktion för att tilldela bilder
         if (characterOne.name === "Leia Organa") {
             characterOne.pictureUrl = leiaPic;
@@ -139,8 +226,12 @@ characterOneInfoDiv.innerHTML = `
 <li>Haircolor: <div id=hairColorOne> ${characterOneInfo.hair_color}</div></li>
 <li>Skincolor: <div id=skinColorOne> ${characterOneInfo.skin_color}</div></li>
 <li>Eyecolor: <div id=eyeColorOne> ${characterOneInfo.eye_color} </div></li>
-<ol id="movieOne">Films:</ol>
-</div>`
+<div class="movieDiv" id="movieOne">
+<ol >Films:</ol></div>
+</div>
+<div><button id= moreInfoOne>More info</button></div>
+<div id="moreInfoOneBtns"></div>
+`
 
 
 //skapa div för andra karaktären
@@ -153,7 +244,12 @@ characterTwoInfoDiv.innerHTML =
 <li>Haircolor: <div id=hairColorTwo> ${characterTwoInfo.hair_color}</div></li>
 <li>Skincolor: <div id=skinColorTwo> ${characterTwoInfo.skin_color}</div></li>
 <li>Eyecolor: <div id=eyeColorTwo> ${characterTwoInfo.eye_color} </div></li>
-<ol id="movieTwo">Films:</ol>
+<div class="movieDiv" id="movieTwo">
+<ol>Films:</ol>
+</div>
+</div>
+<div><button id= moreInfoTwo>More info</button></div>
+<div id="moreInfoTwoBtns"></div>
 `;
 compareInfoOne.append(characterOneInfoDiv);
 compareInfoTwo.append(characterTwoInfoDiv);
@@ -222,11 +318,87 @@ moreMovies.classList.add('more-movies');
             movieListTwo.innerHTML = `${movie.title}`;
             movieListWrapperTwo.append(movieListTwo);
         });
+        //lägg till mer info
+        let moreInfoOne = document.querySelector('#moreInfoOne');
+        let moreInfoTwo = document.querySelector('#moreInfoTwo');
+        let moreInfoOneBtns = document.querySelector('#moreInfoOneBtns');
+        let moreInfoTwoBtns = document.querySelector('#moreInfoTwoBtns');
+        moreInfoOne.addEventListener('click', () => {
+            let oneFirstMovieBtn = document.createElement('Button');
+            oneFirstMovieBtn.innerHTML = 'First movie';
+            let oneExpensiveVehicelBtn = document.createElement('Button');
+            oneExpensiveVehicelBtn.innerHTML = 'Expensive vehicle';
+            let homePlanetBtn = document.createElement('Button');
+            homePlanetBtn.innerHTML = 'Home planet';
+            moreInfoOneBtns.append(oneFirstMovieBtn);
+            moreInfoOneBtns.append(oneExpensiveVehicelBtn);
+            moreInfoOneBtns.append(homePlanetBtn);
+            oneFirstMovieBtn.addEventListener('click', () => {
+                characterOneInfoDiv.innerHTML = '';
+                let moreInfoOneDiv = document.createElement('div');
+                moreInfoOneDiv.innerHTML = `
+                ${characterOne.name} first appeared in a movie ${characterOne.getfirstMovie(characterOneInfo)}
+                `;
+                characterOneInfoDiv.append(moreInfoOneDiv);
+            });
+            oneExpensiveVehicelBtn.addEventListener('click', () => {
+                characterOneInfoDiv.innerHTML = '';
+                let moreInfoOneDiv = document.createElement('div');
+                moreInfoOneDiv.innerHTML = `
+                ${characterOne.name} most expensive vehicle is ${characterOne.getExpensiveVehicle(characterOneInfo)}
+                `;
+                characterOneInfoDiv.append(moreInfoOneDiv);
+            }  );
+            homePlanetBtn.addEventListener('click', () => {
+                characterOneInfoDiv.innerHTML = '';
+                let moreInfoOneDiv = document.createElement('div');
+                moreInfoOneDiv.innerHTML = `
+               ${characterOne.getHomePlanet(characterOneInfo, characterTwoInfo)}
+                `;
+                characterOneInfoDiv.append(moreInfoOneDiv);
+            });
+        
+        });
+        moreInfoTwo.addEventListener('click', () => {
+            let twoFirstMovieBtn = document.createElement('Button');
+            twoFirstMovieBtn.innerHTML = 'First movie';
+            let twoExpensiveVehicelBtn = document.createElement('Button');
+            twoExpensiveVehicelBtn.innerHTML = 'Expensive vehicle';
+            let homePlanetBtn = document.createElement('Button');
+            homePlanetBtn.innerHTML = 'Home planet';
+            moreInfoTwoBtns.append(twoFirstMovieBtn);
+            moreInfoTwoBtns.append(twoExpensiveVehicelBtn);
+            moreInfoTwoBtns.append(homePlanetBtn);
+            twoFirstMovieBtn.addEventListener('click', () => {
+                characterTwoInfoDiv.innerHTML = '';
+                let moreInfoTwoDiv = document.createElement('div');
+                moreInfoTwoDiv.innerHTML = `
+                ${characterTwo.name} first appeared in a movie ${characterTwo.getfirstMovie(characterTwoInfo)}
+                `;
+                characterTwoInfoDiv.append(moreInfoTwoDiv);
+            });
+            twoExpensiveVehicelBtn.addEventListener('click', () => {
+                characterTwoInfoDiv.innerHTML = '';
+                let moreInfoTwoDiv = document.createElement('div');
+                moreInfoTwoDiv.innerHTML = `
+                ${characterTwo.name} most expensive vehicle is ${characterTwo.getExpensiveVehicle(characterTwoInfo)}
+                `;
+                characterTwoInfoDiv.append(moreInfoTwoDiv);
+        }); 
+            homePlanetBtn.addEventListener('click', () => {
+                characterTwoInfoDiv.innerHTML = '';
+                let moreInfoTwoDiv = document.createElement('div');
+                moreInfoTwoDiv.innerHTML = `
+               ${characterTwo.getHomePlanet(characterTwoInfo, characterOneInfo)}
+                `;
+                characterTwoInfoDiv.append(moreInfoTwoDiv);
+        
+        });
+        
         });
     });
-    };
-
-
+});
+};
 
     const loadPage = async () => {
         let data = await getPeople('https://swapi.dev/api/');
