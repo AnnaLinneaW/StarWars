@@ -9,8 +9,8 @@ class Character {
     constructor(name, gender, height, mass, hair_color, skinColor, eyeColor, movies, pictureUrl) {
         this.name = name;
         this.gender = gender;
-        this.height = Number(height);
-        this.mass = Number(mass);
+        this.height = height;
+        this.mass = mass;
         this.hair_color = hair_color;
         this.skinColor = skinColor;
         this.eyeColor = eyeColor;
@@ -165,18 +165,18 @@ sameGender1.classList.add('same-gender');
 sameGender2.classList.add('same-gender');
 } ;
 // jämnför längd
-if(characterOneInfo.height > characterTwoInfo.height) {
+if(Number(characterOneInfo.height) > Number(characterTwoInfo.height)) {
 let taller= document.querySelector('#heightOne');
 taller.classList.add('taller');
-} else if(characterOneInfo.height < characterTwoInfo.height) {
+} else if(Number(characterOneInfo.height) < Number(characterTwoInfo.height)) {
 let taller= document.querySelector('#heightTwo');
 taller.classList.add('taller');
 } ;
 // jämnför vikt
-if (characterOneInfo.mass > characterTwoInfo.mass) {
+if (Number(characterOneInfo.mass) > Number(characterTwoInfo.mass)) {
 let heavier= document.querySelector('#weightOne');
 heavier.classList.add('heavier');
-} else if (characterOneInfo.mass < characterTwoInfo.mass) {
+} else if (Number(characterOneInfo.mass) < Number(characterTwoInfo.mass)) {
 let heavier= document.querySelector('#weightTwo');
 heavier.classList.add('heavier');}
 // jämnför hårfärg
@@ -208,9 +208,6 @@ moreMovies.classList.add('more-movies');
 let moreMovies= document.querySelector('#movieTwo');
 moreMovies.classList.add('more-movies');
 } ;
-
-
-
 
         characterOneMovies.forEach(movie => {
             let movieListWrapperOne = document.querySelector("#movieOne");
