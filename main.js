@@ -38,13 +38,8 @@ class Character {
         return sameMoviesTitle;
     };
     
-      
-      
-      
-
-
     getfirstMovie(character) {
-        return character.movies[0].release_date 
+        return character.films[0].release_date 
     };
 
     getHomePlanet(characterOne, characterTwo) {
@@ -209,17 +204,20 @@ const getCharacters = () => {
                 
       let characterDiv = document.createElement('div');
       characterDiv.classList.add('character-div');
-      characterDiv.innerHTML = `<div class=character-one><p>${characterOne.name}</p>
+      characterDiv.innerHTML = `
+      <div class=character-one><p>${characterOne.name}</p>
         <img src="${characterOne.pictureUrl}" alt="characterOne">
       <div id="characterOneInfo"></div>
       </div>
+        <div class="compare-div">
       <button id="compareBtn">Compare</button>
+      <div id="moreInfoDiv" class="more-info-div"></div>
+      </div>
       <div class= character-two>
       <p>${characterTwo.name}</p>
         <img src="${characterTwo.pictureUrl}" alt="characterTwo">
       <div id="characterTwoInfo"></div>
-      </div>
-
+      </div> 
      `;
 // lägg in div i contentWrapper
       contentWrapper.append(characterDiv);
@@ -227,10 +225,12 @@ const getCharacters = () => {
         let compareBtn = document.querySelector('#compareBtn');
         let compareInfoOne = document.querySelector('#characterOneInfo');
         let compareInfoTwo = document.querySelector("#characterTwoInfo");
+        let moreInfoDiv = document.querySelector('#moreInfoDiv');
 
         // eventlistener för compareBtn
         compareBtn.addEventListener('click', () => {
             //skapa div för första karaktären
+            moreInfoDiv.innerHTML = '';
             compareInfoOne.innerHTML = '';
             compareInfoTwo.innerHTML = '';
 let characterOneInfoDiv= document.createElement('div');
@@ -320,14 +320,12 @@ moreMovies.classList.add('more-movies');
 let moreMovies= document.querySelector('#movieTwo');
 moreMovies.classList.add('more-movies');
 } ;
-
         characterOneMovies.forEach(movie => {
             let movieListWrapperOne = document.querySelector("#movieOne");
             let movieListOne = document.createElement("li");
             movieListOne.innerHTML = `${movie.title}`;
           movieListWrapperOne.append(movieListOne);
         });
-        
         characterTwoMovies.forEach(movie => {
             let movieListWrapperTwo = document.querySelector("#movieTwo");
             let movieListTwo = document.createElement("li");
@@ -353,38 +351,37 @@ moreMovies.classList.add('more-movies');
             moreInfoOneBtns.append(oneExpensiveVehicelBtn);
             moreInfoOneBtns.append(homePlanetBtn);
             oneFirstMovieBtn.addEventListener('click', () => {
-                characterOneInfoDiv.innerHTML = '';
+                moreInfoDiv.innerHTML = '';
                 let moreInfoOneDiv = document.createElement('div');
                 moreInfoOneDiv.innerHTML = `
                 ${characterOne.name} first appeared in a movie ${characterOne.getfirstMovie(characterOneInfo)}
                 `;
-                characterOneInfoDiv.append(moreInfoOneDiv);
+                moreInfoDiv.append(moreInfoOneDiv);
             });
             oneExpensiveVehicelBtn.addEventListener('click', () => {
-                characterOneInfoDiv.innerHTML = '';
+                moreInfoDiv.innerHTML = '';
                 let moreInfoOneDiv = document.createElement('div');
                 moreInfoOneDiv.innerHTML = `
                 ${characterOne.name} most expensive vehicle is ${characterOne.getExpensiveVehicle(characterOneInfo)}
                 `;
-                characterOneInfoDiv.append(moreInfoOneDiv);
+                moreInfoDiv.append(moreInfoOneDiv);
             }  );
             homePlanetBtn.addEventListener('click', () => {
-                characterOneInfoDiv.innerHTML = '';
+                moreInfoDiv.innerHTML = '';
                 let moreInfoOneDiv = document.createElement('div');
                 moreInfoOneDiv.innerHTML = `
                ${characterOne.getHomePlanet(characterOneInfo, characterTwoInfo)}
                 `;
-                characterOneInfoDiv.append(moreInfoOneDiv);
+                moreInfoDiv.append(moreInfoOneDiv);
             });
             sameMoviesBtn.addEventListener('click', () => {
-                characterOneInfoDiv.innerHTML = '';
+                moreInfoDiv.innerHTML = '';
                 let moreInfoOneDiv = document.createElement('div');
                 moreInfoOneDiv.innerHTML = `
                 ${characterOne.name} and ${characterTwo.name} have been in these movies together:  ${characterOne.getSameFilms(characterOneInfo, characterTwoInfo)}
                 `;
-                characterOneInfoDiv.append(moreInfoOneDiv);
+                moreInfoDiv.append(moreInfoOneDiv);
             });
-        
         });
         moreInfoTwo.addEventListener('click', () => {
             let twoFirstMovieBtn = document.createElement('Button');
@@ -400,44 +397,43 @@ moreMovies.classList.add('more-movies');
             moreInfoTwoBtns.append(twoExpensiveVehicelBtn);
             moreInfoTwoBtns.append(homePlanetBtn);
             twoFirstMovieBtn.addEventListener('click', () => {
-                characterTwoInfoDiv.innerHTML = '';
+                moreInfoDiv.innerHTML = '';
                 let moreInfoTwoDiv = document.createElement('div');
                 moreInfoTwoDiv.innerHTML = `
                 ${characterTwo.name} first appeared in a movie ${characterTwo.getfirstMovie(characterTwoInfo)}
                 `;
-                characterTwoInfoDiv.append(moreInfoTwoDiv);
+                moreInfoDiv.append(moreInfoTwoDiv);
             });
             twoExpensiveVehicelBtn.addEventListener('click', () => {
-                characterTwoInfoDiv.innerHTML = '';
+                moreInfoDiv.innerHTML = '';
                 let moreInfoTwoDiv = document.createElement('div');
                 moreInfoTwoDiv.innerHTML = `
                 ${characterTwo.name} most expensive vehicle is ${characterTwo.getExpensiveVehicle(characterTwoInfo)}
                 `;
-                characterTwoInfoDiv.append(moreInfoTwoDiv);
+                moreInfoDiv.append(moreInfoTwoDiv);
         }); 
             homePlanetBtn.addEventListener('click', () => {
-                characterTwoInfoDiv.innerHTML = '';
+                moreInfoDiv.innerHTML = '';
                 let moreInfoTwoDiv = document.createElement('div');
                 moreInfoTwoDiv.innerHTML = `
                ${characterTwo.getHomePlanet(characterTwoInfo, characterOneInfo)}
                 `;
-                characterTwoInfoDiv.append(moreInfoTwoDiv);
+                moreInfoDiv.append(moreInfoTwoDiv);
         
         });
             sameMoviesBtn.addEventListener('click', () => {
-                characterTwoInfoDiv.innerHTML = '';
+                moreInfoDiv.innerHTML = '';
                 let moreInfoTwoDiv = document.createElement('div');
                 moreInfoTwoDiv.innerHTML = `
                 ${characterOne.name} and ${characterTwo.name} have been in these movies together: ${characterTwo.getSameFilms(characterTwoInfo, characterOneInfo)}
                 `;
-                characterTwoInfoDiv.append(moreInfoTwoDiv);
+                moreInfoDiv.append(moreInfoTwoDiv);
             });
         
         });
     });
 });
 };
-
     const loadPage = async () => {
         let data = await getPeople('https://swapi.dev/api/');
         getCharacters(data);

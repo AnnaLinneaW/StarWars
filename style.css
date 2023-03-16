@@ -67,6 +67,24 @@ img{
     text-align: left;
     padding: 5px;
 }
+
+.more-info-div{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    align-self: flex-end;
+    text-align: left;
+    padding-top: 50px;
+    padding:20px;
+    margin: 20px;
+}
+.compare-div{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+ 
+}
 p{
     font-family: moonhouse;
     font-size: 30px;
@@ -124,5 +142,5 @@ select{
     color: orange
 }
 .same-eyecolor{
-    color: yellow
+    color: rgb(92, 80, 201)
 }
