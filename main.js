@@ -338,6 +338,7 @@ moreMovies.classList.add('more-movies');
         let moreInfoOneBtns = document.querySelector('#moreInfoOneBtns');
         let moreInfoTwoBtns = document.querySelector('#moreInfoTwoBtns');
         moreInfoOne.addEventListener('click', () => {
+            compareBtn.style.display = 'none';
             let oneFirstMovieBtn = document.createElement('Button');
             oneFirstMovieBtn.innerHTML = 'First movie';
             let oneExpensiveVehicelBtn = document.createElement('Button');
