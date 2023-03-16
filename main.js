@@ -5,7 +5,7 @@ async function getPeople(endpoint) {
 }
 
 class Character {
-    constructor(name, gender, height, mass, hair_color, skinColor, eyeColor, movies, pictureUrl,vehicles, starships, homeworld) {
+    constructor(name, gender, height, mass, hair_color, skinColor, eyeColor, films, pictureUrl, vehicles, starships, homeworld) {
         this.name = name;
         this.gender = gender;
         this.height = height;
@@ -13,24 +13,35 @@ class Character {
         this.hair_color = hair_color;
         this.skinColor = skinColor;
         this.eyeColor = eyeColor;
-        this.movies = [];
+        this.films = films;
         this.pictureUrl = pictureUrl;
         this.homeworld = {};
         this.vehicles = vehicles;
         this.starships = starships;
     };
 
-    getSameMovies(characterOne, characterTwo) {
+    
+    getSameFilms(characterOne, characterTwo) {
         let sameMovies = [];
-        for(let i = 0; i < characterOne.movies.length; i++) {
-            for(let j = 0; j < characterTwo.movies.length; j++) {
-                if(characterOne.movies[i] === characterTwo.movies[j]) {
-                    sameMovies.push(characterOne.movies[i]);
+        let sameMoviesTitle = [];
+        if (characterOne.films && characterTwo.films) {
+            for(let i = 0; i < characterOne.films.length; i++) {
+                for(let j = 0; j < characterTwo.films.length; j++) {
+                    if(characterOne.films[i].title === characterTwo.films[j].title) {
+                        sameMovies.push(characterOne.films[i]);
+                    }
                 }
             }
         }
-        sameMovies.forEach(movie => console.log(movie.title));
+
+        sameMovies.forEach(movie => sameMoviesTitle.push(movie.title));
+        return sameMoviesTitle;
     };
+    
+      
+      
+      
+
 
     getfirstMovie(character) {
         return character.movies[0].release_date 
@@ -92,6 +103,9 @@ const getCharacters = () => {
             let movie = await getPeople(characterTwoInfo.films[i]);
             characterTwoMovies.push(movie);
         };
+        //lägg till filmerna i objektet
+        characterOneInfo.films = characterOneMovies;
+        characterTwoInfo.films = characterTwoMovies;
         //funktionalitet för att hämta fordon
         let characterOneVehicles = [];
         let characterTwoVehicles = [];
@@ -136,29 +150,31 @@ const getCharacters = () => {
             characterOneInfo.hair_color,
             characterOneInfo.skinColor,
             characterOneInfo.eyeColor,
+            characterOneMovies, 
             characterOneInfo.pictureUrl,
-            characterOneInfo.movies= characterOneMovies,
             characterOneInfo.vehicles=characterOneVehicles,
             characterOneInfo.starships=characterOneStarships,
             characterOneInfo.homeworld=characterOneHomeworld,
-            );
-            let characterTwo = new Character(
-                characterTwoInfo.name,
-                characterTwoInfo.gender,
-                characterTwoInfo.height,
-                characterTwoInfo.mass,
-                characterTwoInfo.hair_color,
-                characterTwoInfo.skinColor,
-                characterTwoInfo.eyeColor,
-                characterTwoInfo.pictureUrl,
-                characterTwoInfo.movies=characterTwoMovies,
-                characterTwoInfo.vehicles=characterTwoVehicles,
-                characterTwoInfo.starships= characterTwoStarships,
-                characterTwoInfo.homeworld=characterTwoHomeworld,
-                );
+        );
+        let characterTwo = new Character(
+            characterTwoInfo.name,
+            characterTwoInfo.gender,
+            characterTwoInfo.height,
+            characterTwoInfo.mass,
+            characterTwoInfo.hair_color,
+            characterTwoInfo.skinColor,
+            characterTwoInfo.eyeColor,
+            characterTwoMovies,
+            characterTwoInfo.pictureUrl,
+            characterTwoInfo.vehicles=characterTwoVehicles,
+            characterTwoInfo.starships= characterTwoStarships,
+            characterTwoInfo.homeworld=characterTwoHomeworld,
+        );
+        
 
-                characterOne.getSameMovies(characterTwoInfo, characterOneInfo);
-                console.log(characterOne);
+
+                characterOne.getSameFilms(characterOneInfo, characterTwoInfo);
+                
 
 
 //funktion för att tilldela bilder
@@ -330,6 +346,9 @@ moreMovies.classList.add('more-movies');
             oneExpensiveVehicelBtn.innerHTML = 'Expensive vehicle';
             let homePlanetBtn = document.createElement('Button');
             homePlanetBtn.innerHTML = 'Home planet';
+            let sameMoviesBtn = document.createElement('Button');
+            sameMoviesBtn.innerHTML = 'Same movies';
+            moreInfoOneBtns.append(sameMoviesBtn);
             moreInfoOneBtns.append(oneFirstMovieBtn);
             moreInfoOneBtns.append(oneExpensiveVehicelBtn);
             moreInfoOneBtns.append(homePlanetBtn);
@@ -357,6 +376,14 @@ moreMovies.classList.add('more-movies');
                 `;
                 characterOneInfoDiv.append(moreInfoOneDiv);
             });
+            sameMoviesBtn.addEventListener('click', () => {
+                characterOneInfoDiv.innerHTML = '';
+                let moreInfoOneDiv = document.createElement('div');
+                moreInfoOneDiv.innerHTML = `
+                ${characterOne.name} and ${characterTwo.name} have been in these movies together:  ${characterOne.getSameFilms(characterOneInfo, characterTwoInfo)}
+                `;
+                characterOneInfoDiv.append(moreInfoOneDiv);
+            });
         
         });
         moreInfoTwo.addEventListener('click', () => {
@@ -366,6 +393,9 @@ moreMovies.classList.add('more-movies');
             twoExpensiveVehicelBtn.innerHTML = 'Expensive vehicle';
             let homePlanetBtn = document.createElement('Button');
             homePlanetBtn.innerHTML = 'Home planet';
+            let sameMoviesBtn = document.createElement('Button');
+            sameMoviesBtn.innerHTML = 'Same movies';
+            moreInfoTwoBtns.append(sameMoviesBtn);
             moreInfoTwoBtns.append(twoFirstMovieBtn);
             moreInfoTwoBtns.append(twoExpensiveVehicelBtn);
             moreInfoTwoBtns.append(homePlanetBtn);
@@ -394,6 +424,14 @@ moreMovies.classList.add('more-movies');
                 characterTwoInfoDiv.append(moreInfoTwoDiv);
         
         });
+            sameMoviesBtn.addEventListener('click', () => {
+                characterTwoInfoDiv.innerHTML = '';
+                let moreInfoTwoDiv = document.createElement('div');
+                moreInfoTwoDiv.innerHTML = `
+                ${characterOne.name} and ${characterTwo.name} have been in these movies together: ${characterTwo.getSameFilms(characterTwoInfo, characterOneInfo)}
+                `;
+                characterTwoInfoDiv.append(moreInfoTwoDiv);
+            });
         
         });
     });
